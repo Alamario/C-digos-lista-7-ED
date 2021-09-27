@@ -1,0 +1,120 @@
+import java.util.*;
+import java.io.*;
+
+class Elemento{
+    String ip;
+    int cont;
+    
+    public Elemento(){
+        
+    }
+
+}
+
+public class Trabalho {
+    public static void main(String[] arg) throws Exception{
+       HashMap L = new HashMap();
+       FileInputStream stream = new FileInputStream("C:\\Users\\Sarai\\Desktop\\acesslog\\access.log");
+       InputStreamReader reader = new InputStreamReader(stream);
+       BufferedReader br = new BufferedReader(reader);
+       String linhaLog = br.readLine();
+     
+        
+       //enquanto que a linha do arquivo log for diferente de null
+       while(linhaLog != null){
+           
+          
+          
+           Elemento E = new Elemento();
+           String ipLog = linhaLog.substring(0, linhaLog.indexOf("-") - 1);
+           
+           
+           
+           //a variavel ip do elemento armazena ip log
+           E.ip = ipLog;
+           
+           //int h para saber se o ip log já está no Hash
+           int h = 0;
+                   
+           
+
+           int x;
+           //método para saber se ip log já foi usado e acrescentar no contador  
+              if(L.containsKey(E.ip)){
+                  x = (int) L.get(E.ip);
+                  x++;
+                  L.put(E.ip, x);
+              
+              }
+           
+           
+         
+           //caso o ip log não esteja no Hash    
+           else{
+               
+               E.cont++;
+               L.put(E.ip, E.cont);
+           }
+        
+              
+          linhaLog = br.readLine();
+       }
+   
+       
+       FileInputStream str = new FileInputStream("C:\\Users\\Sarai\\Desktop\\acesslog\\ajuda.txt");
+       InputStreamReader rd = new InputStreamReader(str);
+       BufferedReader brd = new BufferedReader(rd);
+       String linhaConsulta = brd.readLine();
+       
+       long media, soma = 0, mediana, DP, somadp = 0, max = 0, min = 100000;
+       long[] tempo = new long[100];
+       
+       while(linhaConsulta != null){
+           int aux = 0;
+
+           long inicio = System.currentTimeMillis();
+ 
+           System.out.println(linhaConsulta + " : " +L.get(linhaConsulta));  
+           
+           long fim = System.currentTimeMillis();
+           tempo[aux] = fim - inicio;
+          
+           aux++;
+           
+       linhaConsulta = brd.readLine();
+       }
+       
+       int aux = 0;
+       while(aux < 100){
+           soma = soma + tempo[aux];
+           
+           if(tempo[aux] > max)
+               max = tempo[aux];
+           if(tempo[aux] < min)
+               min = tempo[aux];
+           aux++;
+       
+       }
+       media = soma/100;
+        
+        
+        mediana = (tempo[49] + tempo[50])/2;
+        
+        aux = 0;
+        while(aux < 100){
+            somadp = somadp + ((tempo[aux] - media)*(tempo[aux] - media));
+            aux++;
+        
+        }
+        DP = (long) Math.sqrt(somadp/100);
+        
+        System.out.println("\n");
+        System.out.println("Tempo medio: " + media + " milisegundos");
+        System.out.println("mediana: " + mediana + " milisegundos");
+        System.out.println("minimo: " + min + " milisegundos");
+        System.out.println("maximo: " + max + " milisegundos");
+        System.out.println("Desvio Padrao: " + DP);
+      
+ }
+    
+}
